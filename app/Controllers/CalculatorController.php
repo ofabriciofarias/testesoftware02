@@ -11,4 +11,13 @@ class CalculatorController {
         
         return $a + $b;
     }
+
+    public function subtrair($a, $b) {
+        if(!is_numeric($a) || !is_numeric($b)){
+            throw new InvalidArgumentException("Os valores fornecidos devem ser números válidos.");
+        }
+        return $a - $b;
+    }
+        //Outras operações
+
 }

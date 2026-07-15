@@ -11,6 +11,8 @@ $pdo = new PDO("mysql:host=localhost;dbname=projexemplo", "root", "");
 $mensagemLogin = "";
 $resultadoSoma = null;
 $erroSoma = null;
+$resultadoSubtracao = null;
+$erroSubtracao = null;
 
 // Verifica se houve uma requisição POST e qual formulário a originou
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,6 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultadoSoma = $calc->somar($_POST['numero1'], $_POST['numero2']);
         } catch (Exception $e) {
             $erroSoma = $e->getMessage();
+        }
+    }elseif (isset($_POST['subtracao']) && $_POST['subtracao'] === 'sub') {
+        $calc = new CalculatorController();
+        try{
+            $resultadoSubtracao = $calc->subtrair($_POST['numero1'], $_POST['numero2']);
+        }catch(Exception $e){
+            $erroSubtracao = $e->getMessage();
         }
     }
 }
@@ -83,10 +92,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="calculadora-box">
         <h2>Calculadora de Soma</h2>
         <form method="POST" action="index.php">
-            <input type="number" step="any" name="numero1" id="num1" placeholder="Nº 1" required>
+            <input type="number" step="any" name="numero1" id="num1" placeholder="Nº 1">
             <span style="font-size: 20px; font-weight:bold;">+</span>
-            <input type="number" step="any" name="numero2" id="num2" placeholder="Nº 2" required>
+            <input type="number" step="any" name="numero2" id="num2" placeholder="Nº 2">
             <button type="submit" name="acao" value="somar" id="btn-somar">Calcular</button>
+        </form>
+    </div>
+
+    <!-- FORMULÁRIO DA CALCULADORA -->
+    <div class="calculadora-box">
+        <h2>Calculadora de Subtração</h2>
+        <form method="POST" action="index.php">
+            <input type="number" step="any" name="numero1" id="num1" placeholder="Nº 1">
+            <span style="font-size: 20px; font-weight:bold;">-</span>
+            <input type="number" step="any" name="numero2" id="num2" placeholder="Nº 2">
+            <button type="submit" name="subtracao" value="sub" id="btn-subtracao">Calcular</button>
         </form>
     </div>
 </div>
@@ -103,6 +123,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php else: ?>
             <h3 style="color: red;">Erro</h3>
             <p><?= htmlspecialchars($erroSoma) ?></p>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- MODAL DE RESULTADO DA CALCULADORA Subtração-->
+<?php if ($resultadoSubtracao !== null || $erroSubtracao !== null): ?>
+<div id="meuModal" class="modal" style="display: block;">
+    <div class="modal-content">
+        <span class="close" onclick="document.getElementById('meuModal').style.display='none'">&times;</span>
+        
+        <?php if ($resultadoSubtracao !== null): ?>
+            <h3>Resultado da Subtração</h3>
+            <div class="resultado-texto" id="resultado-valor"><?= htmlspecialchars($resultadoSubtracao) ?></div>
+        <?php else: ?>
+            <h3 style="color: red;">Erro</h3>
+            <p><?= htmlspecialchars($erroSubtracao) ?></p>
         <?php endif; ?>
     </div>
 </div>

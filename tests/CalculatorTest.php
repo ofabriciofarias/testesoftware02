@@ -34,4 +34,22 @@ class CalculatorTest extends TestCase {
         // Act: Executa a ação que deve disparar a exceção
         $this->calc->somar("A", "B");
     }
+
+    public function testSubtracaoDeDoisNumerosPositivos() {
+        // Arrange & Act
+        $resultado = $this->calc->subtrair(15, 25);
+        
+        // Assert
+        $this->assertEquals(-10, $resultado, "A subtração de 15 e 25 deveria ser exatamente -10.");
+    }
+
+    public function testSubtracaoRejeitaLetras() {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Os valores fornecidos devem ser números válidos.");
+        
+        $this->calc->subtrair("A", "B");
+    }
+
+    //Outros testes
+
 }
